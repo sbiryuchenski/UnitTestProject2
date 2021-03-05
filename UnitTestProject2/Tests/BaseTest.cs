@@ -8,6 +8,7 @@ using OpenQA.Selenium.Interactions;
 using System;
 using OpenQA.Selenium.Support.UI;
 using System.Configuration;
+using OpenQA.Selenium.IE;
 
 namespace NUnitTestProject1
 {
@@ -24,11 +25,21 @@ namespace NUnitTestProject1
         [OneTimeSetUp, Order(0)]
         public void Initialization() // Инициализация браузера, страницы и элементов на странице
         {
-            string browser = System.Configuration
+            string browser = ConfigurationManager.AppSettings.Get("browser");
             string path = Directory.GetCurrentDirectory();
-            switch
-                { }
-            driver = new ChromeDriver(path);
+            switch (browser)
+            {
+                case "chrome":
+                    driver = new ChromeDriver(path);
+                    break;
+                case "ie":
+                    driver = new InternetExplorerDriver(path);
+                    break;
+                default:
+                    driver = new ChromeDriver(path);
+                    break;
+
+            }
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(5);// Ожидание загрузки страницы 5 секунд
             SetURL();
             InitPage();
